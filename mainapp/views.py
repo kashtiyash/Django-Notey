@@ -30,7 +30,7 @@ def search(request):
     template = 'mainapp/home.html'
 
     query = request.GET.get('q')
-
+    paginate_by = 3
     result = Post.objects.filter(
                     Q(title_icontains=query) |
                     Q(author__username__icontains=query) |
@@ -55,13 +55,14 @@ class PostListView(ListView):
     template_name = 'mainapp/home.html'
     context_object_name =  'posts'
     ordering = ['-date_posted']
-
+    paginate_by = 3
 
 
 class UserPostListView(ListView):
     model = Post
     template_name = 'mainapp/user_posts.html' 
     context_object_name = 'posts'
+    paginate_by = 3
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))

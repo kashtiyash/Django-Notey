@@ -1,0 +1,108 @@
+{% extends 'mainapp/base.html' %} 
+
+{% block title %} Home {% endblock %} 
+{% block style %}
+    .card{
+        opacity: 0.9;
+    }
+
+    .card:hover{
+          background-color: azure;
+          box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+          box-shadow: 0px 15px 26px rgba(0, 0, 0, 0.50);
+          -webkit-transition: all 0.2s ease-in;
+          transition: all 0.2s ease-in;
+          margin-top: 50px;
+          transform: scale(1.03);
+
+}
+{% endblock %}
+
+{% block body %} 
+{% for post in posts %} 
+
+<div class="container ">
+
+<div class="card shadow my-3 mx-5">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-2  ">
+        
+        <img
+          class="img-thumbnail "
+          src="{{ post.author.profile.image.url }} "
+          alt="user profile image"
+          style="height: 170px; max-width: 170px;margin-top: 16px; border-color: tomato; border-width: 2px; border-radius: 100px;"
+        />
+      
+      </div>
+      
+      <div class="col-md-10">
+        <h3>
+          <a
+            class="article-title text-justify"
+            href="{% url 'post_details' post.id %}"
+          >
+            {{ post.title }}</a
+          >
+        </h3>
+        <hr>
+        <div class="d-md-flex justify-content-md-end">
+          <small class="text-muted">{{ post.date_posted | date:"d F , Y "}}</small>
+        </div>
+        
+        <small>Posted by :</small>
+        <a class="h5" href="{% url 'user_post' post.author.username  %}"
+          >{{ post.author.username}}</a
+        >
+        <p class="text-justify my-3">Content: {{post.content}}</p>
+
+        {% if post.file %}
+        <div class="button d-md-flex justify-content-md-end">
+          <a
+            class="btn btn-outline-success btn-d"
+            href="{{ post.file.url }}"
+            download
+            type="submit"
+            ><i class="fas fa-download"></i
+          ></a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% endfor %}
+
+<div class="container">
+    <div class=" text-center">
+
+
+
+     {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-sm btn-outline-dark mb-4" href="?page=1"><i class="fa-solid fa-angles-left"></i></a>
+        <a class="btn btn-sm btn-outline-dark mb-4" href="?page={{ page_obj.previous_page_number }}"><i class="fa-solid fa-angle-left"></i></a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-sm btn-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn  btn-sm btn-outline-dark mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-sm btn-outline-dark mb-4" href="?page={{ page_obj.next_page_number }}"><i class="fa-solid fa-angle-right"></i></a>
+        <a class="btn btn-sm btn-outline-dark mb-4" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa-solid fa-angles-right"></i></a>
+      {% endif %}
+
+    {% endif %}
+</div>
+</div>
+{% endblock %}

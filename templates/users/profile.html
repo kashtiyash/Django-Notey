@@ -1,0 +1,41 @@
+{% extends "mainapp/base.html" %}
+{% load crispy_forms_filters %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="m-3 text-center"> Profile Info </h1>
+
+    <div class="container mt-4 mb-4 ">
+        <div class="card mb-3 mx-auto" style="max-width: 640px; background-color: azure; border-color: blue;">
+            <div class="row g-0" style="align-items: center;">
+                <div class="col-md-4">
+                     <img  src="{{ user.profile.image.url }}" class="img-thumbnail  mx-2 my-2"
+                      style="height: 100px; width: 100px; border-radius: 80px;" alt="profile image">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body" >
+                        <h2><a class="card-title text-dark" href="{% url 'user_post' user.username  %}"><small >Username : </small>{{ user.username }}</a></h2>
+                        <h4 class="text-justify"><small >Email : </small>{{ user.email }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card card-body ">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ update_form|crispy }}
+                {{ profile_form|crispy }}
+
+                <div class="d-md-flex justify-content-center">
+                     <button class="btn btn-outline-primary " type="submit"><i class="fas fa-upload"></i> Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}
